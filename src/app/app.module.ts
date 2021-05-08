@@ -8,12 +8,14 @@ import { BoardComponent } from './board/board.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule} from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { StartPageComponent } from './start-page/start-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SquareComponent,
-    BoardComponent
+    BoardComponent,
+    StartPageComponent
   ],
   imports: [
     BrowserModule,

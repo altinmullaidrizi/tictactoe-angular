@@ -1,0 +1,7 @@
+<div class="container">
+  <h1>TicTacToe</h1>
+  <div class="row">
+    <button nbButton status="info" [routerLink]="['/board']" [queryParams]="{ players: 'single'}">Single Player (vs Computer)</button>
+    <button nbButton status="info" [routerLink]="['/board']" [queryParams]="{ players: 'multi'}">Multi Player</button>
+  </div>
+</div>

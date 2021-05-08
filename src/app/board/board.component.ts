@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import set = Reflect.set;
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-board',
@@ -9,13 +11,18 @@ export class BoardComponent implements OnInit {
   squares: any[] | any;
   xIsNext: boolean;
   winner: string | any;
+  players: string | any;
+  counter: number;
 
-  constructor() {
+  constructor(private route: ActivatedRoute) {
     this.xIsNext = true;
+    this.players = 'single';
+    this.counter = 0;
   }
 
   ngOnInit(): void {
     this.newGame();
+    this.route.queryParamMap.subscribe(params => this.players = params.get('players'));
   }
 
   // tslint:disable-next-line:typedef
@@ -28,14 +35,45 @@ export class BoardComponent implements OnInit {
   get player() {
     return this.xIsNext ? 'X' : 'O';
   }
-  // tslint:disable-next-line:typedef
-  makeMove(idx: number){
-    if (!this.squares[idx]){
-      this.squares.splice(idx, 1, this.player);
-      this.xIsNext = !this.xIsNext;
-    }
 
-    this.winner = this.calculateWinner();
+  makeMove(idx: number): void {
+    if (this.players === 'single') {
+      if (this.xIsNext) {
+        if (!this.squares[idx]) {
+          this.squares.splice(idx, 1, this.player);
+          this.xIsNext = !this.xIsNext;
+          this.counter++;
+        }
+      }
+      this.winner = this.calculateWinner();
+      setTimeout(() => {
+        if (this.counter < 8) {
+          this.computerMove();
+        }
+      }, 200);
+    } else {
+      if (!this.squares[idx]) {
+        this.squares.splice(idx, 1, this.player);
+        this.xIsNext = !this.xIsNext;
+        this.counter++;
+      }
+      this.winner = this.calculateWinner();
+    }
+    if (this.counter === 8 && this.winner === null){
+      this.winner = 'none. You\'re even!';
+    }
+  }
+
+  computerMove(): void {
+    const randomSq: number = Math.floor(Math.random() * 9);
+    if (this.squares[randomSq] === null) {
+      this.squares.splice(randomSq, 1, this.player);
+      this.xIsNext = !this.xIsNext;
+      this.counter++;
+      this.winner = this.calculateWinner();
+    } else {
+      this.computerMove();
+    }
   }
 
   calculateWinner(): any {
@@ -50,9 +88,9 @@ export class BoardComponent implements OnInit {
       [2, 4, 6],
     ];
     // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < lines.length; i++){
+    for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
-      if (this.squares[a] === this.squares[b] && this.squares[a] === this.squares[c]){
+      if (this.squares[a] === this.squares[b] && this.squares[a] === this.squares[c]) {
         return this.squares[a];
       }
     }

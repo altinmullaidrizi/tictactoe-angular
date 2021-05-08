@@ -2,7 +2,7 @@
   <h1>The Winner is {{ winner }}</h1>
 </div>
 <p>Current Player: {{ player }}</p>
-<button (click)="newGame()" nbButton outline status="primary">New Game</button>
+<button [routerLink]="['']" nbButton outline status="primary">New Game</button>
 <div class="board">
   <app-square *ngFor="let square of squares; let i = index" [value]="square" (click)="makeMove(i)"></app-square>
 </div>
