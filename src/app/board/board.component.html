@@ -1,7 +1,7 @@
 <div class="winner" *ngIf="winner">
   <h1>The Winner is {{ winner }}</h1>
   <button [routerLink]="['']" nbButton outline status="primary">New Game</button>
-  <span class="king">{{ winner }}</span>
+  <span class="king" *ngIf="(winner === 'X' || winner === 'O')">{{ winner }}</span>
 </div>
 <p>Current Player: {{ player }}</p>
 <button [routerLink]="['']" nbButton outline status="primary">Restart</button>

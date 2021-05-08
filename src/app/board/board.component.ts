@@ -57,18 +57,52 @@ export class BoardComponent implements OnInit {
       }
       this.winner = this.calculateWinner();
     }
-    if (this.counter === 8 && this.winner === null){
+    if (this.counter === 9 && this.winner === null) {
       this.winner = 'none. You\'re even!';
     }
   }
 
   computerMove(): void {
+    // Checks Rows if two squares are Xs
+    for (let i = 0; i <= 6; i = i + 3) {
+      if (this.squares[i] !== null && this.squares[i] === this.squares[i + 1] && this.squares[i + 2] === null) {
+        this.computerPosMove(i + 2);
+        return;
+      } else if (this.squares[i] !== null && this.squares[i] === this.squares[i + 2]  && this.squares[i + 1] === null) {
+        this.computerPosMove(i + 1);
+        return;
+      } else if (this.squares[i + 1] !== null && this.squares[i + 1] === this.squares[i + 2]  && this.squares[i] === null) {
+        this.computerPosMove(i);
+        return;
+      }
+    }
+    // Checks Columns if two squares are Xs
+    for (let i = 0; i <= 2; i++) {
+      if (this.squares[i] !== null && this.squares[i] === this.squares[i + 3]  && this.squares[i + 6] === null) {
+        this.computerPosMove(i + 6);
+        return;
+      } else if (this.squares[i] !== null && this.squares[i] === this.squares[i + 6]  && this.squares[i + 3] === null) {
+        this.computerPosMove(i + 3);
+        return;
+      } else if (this.squares[i + 3] !== null && this.squares[i + 3] === this.squares[i + 6]  && this.squares[i] === null) {
+        this.computerPosMove(i);
+        return;
+      }
+    }
+    this.computerRandomMove();
+  }
+
+  computerPosMove(pos: number): void {
+    this.squares.splice(pos, 1, this.player);
+    this.xIsNext = !this.xIsNext;
+    this.counter++;
+    this.winner = this.calculateWinner();
+  }
+
+  computerRandomMove(): void {
     const randomSq: number = Math.floor(Math.random() * 9);
     if (this.squares[randomSq] === null) {
-      this.squares.splice(randomSq, 1, this.player);
-      this.xIsNext = !this.xIsNext;
-      this.counter++;
-      this.winner = this.calculateWinner();
+      this.computerPosMove(randomSq);
     } else {
       this.computerMove();
     }
