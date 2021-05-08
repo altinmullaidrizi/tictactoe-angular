@@ -6,3 +6,34 @@
   align-items: center;
   margin: auto;
 }
+.winner{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: radial-gradient(#061129, transparent);
+  z-index: 9999;
+
+  button{
+    z-index: 99999;
+  }
+}
+span.king{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 70vw;
+  color: lightblue;
+  opacity: .3;
+  backdrop-filter: blur(20px);
+}

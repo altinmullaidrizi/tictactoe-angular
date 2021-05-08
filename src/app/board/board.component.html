@@ -1,8 +1,10 @@
 <div class="winner" *ngIf="winner">
   <h1>The Winner is {{ winner }}</h1>
+  <button [routerLink]="['']" nbButton outline status="primary">New Game</button>
+  <span class="king">{{ winner }}</span>
 </div>
 <p>Current Player: {{ player }}</p>
-<button [routerLink]="['']" nbButton outline status="primary">New Game</button>
+<button [routerLink]="['']" nbButton outline status="primary">Restart</button>
 <div class="board">
   <app-square *ngFor="let square of squares; let i = index" [value]="square" (click)="makeMove(i)"></app-square>
 </div>

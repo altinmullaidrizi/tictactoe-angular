@@ -25,14 +25,12 @@ export class BoardComponent implements OnInit {
     this.route.queryParamMap.subscribe(params => this.players = params.get('players'));
   }
 
-  // tslint:disable-next-line:typedef
-  newGame() {
+  newGame(): void {
     this.squares = Array(9).fill(null);
     this.winner = null;
   }
 
-  // tslint:disable-next-line:typedef
-  get player() {
+  get player(): string {
     return this.xIsNext ? 'X' : 'O';
   }
 
