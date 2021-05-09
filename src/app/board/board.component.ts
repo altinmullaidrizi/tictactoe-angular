@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import set = Reflect.set;
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -63,18 +62,30 @@ export class BoardComponent implements OnInit {
   }
 
   computerMove(): void {
-    // Checks Rows if two squares are Xs
-    for (let i = 0; i <= 6; i = i + 3) {
-      if (this.squares[i] !== null && this.squares[i] === this.squares[i + 1] && this.squares[i + 2] === null) {
-        this.computerPosMove(i + 2);
+    if (this.checkRows('O') !== -1){
+      this.computerPosMove(this.checkRows('O'));
+      console.log('HEHE I WIN looser');
+      return;
+    }
+
+    for (let i = 0; i <= 2; i++) {
+      if (this.squares[i] === 'O' && this.squares[i + 3] === 'O'  && this.squares[i + 6] === null) {
+        this.computerPosMove(i + 6);
         return;
-      } else if (this.squares[i] !== null && this.squares[i] === this.squares[i + 2]  && this.squares[i + 1] === null) {
-        this.computerPosMove(i + 1);
+      } else if (this.squares[i] === 'O' && this.squares[i + 6] === 'O' && this.squares[i + 3] === null) {
+        this.computerPosMove(i + 3);
         return;
-      } else if (this.squares[i + 1] !== null && this.squares[i + 1] === this.squares[i + 2]  && this.squares[i] === null) {
+      } else if (this.squares[i + 3] === 'O' && this.squares[i + 6] === 'O' && this.squares[i] === null) {
         this.computerPosMove(i);
         return;
       }
+    }
+
+    // Checks Rows if two squares are Xs
+    if (this.checkRows('X') !== -1){
+      this.computerPosMove(this.checkRows('X'));
+      console.log('oops, blocked you');
+      return;
     }
     // Checks Columns if two squares are Xs
     for (let i = 0; i <= 2; i++) {
@@ -92,11 +103,32 @@ export class BoardComponent implements OnInit {
     this.computerRandomMove();
   }
 
+  checkRows(elem: string): number {
+    // elem is X or O
+    for (let i = 0; i <= 6; i = i + 3) {
+      const rowArr: any[] = [];
+      let count = 0;
+      for (let j = i; j < i + 3; j++){
+        rowArr.push(this.squares[j]);
+        if (this.squares[j] === elem) { count++; }
+      }
+      if (count === 2){
+        const myMap = rowArr.map(el => el === null); // ex: [false, false, true]
+        console.log(myMap);
+        console.log((myMap.findIndex(el => el) + i));
+        return (myMap.findIndex(el => el) + i);
+      }
+    }
+    return -1;
+  }
+
   computerPosMove(pos: number): void {
-    this.squares.splice(pos, 1, this.player);
-    this.xIsNext = !this.xIsNext;
-    this.counter++;
-    this.winner = this.calculateWinner();
+    if (this.winner === null) {
+      this.squares.splice(pos, 1, 'O');
+      this.xIsNext = !this.xIsNext;
+      this.counter++;
+      this.winner = this.calculateWinner();
+    }
   }
 
   computerRandomMove(): void {
@@ -104,7 +136,7 @@ export class BoardComponent implements OnInit {
     if (this.squares[randomSq] === null) {
       this.computerPosMove(randomSq);
     } else {
-      this.computerMove();
+      this.computerRandomMove();
     }
   }
 
